@@ -4,9 +4,10 @@
  * Keymap puro por codigo, sin VIA. Portado desde valianx/corne-config.
  *
  * Capas:
- *   _BASE  : QWERTY + fila numerica + thumbs; tap-dance shift/caps; KC_MUTE en push de encoder.
- *   _LOWER : numpad 10-key (mano izq) + simbolos de programacion (mano der).
- *   _RAISE : F1..F12 en fila numerica + flechas inverted-T (I/J/K/L) + nav (Home/End/PgUp/PgDn).
+ *   _BASE   : QWERTY + fila numerica + thumbs; tap-dance shift/caps; KC_MUTE en push de encoder.
+ *   _LOWER  : simbolos estandar (mismo layout que el Corne: ! @ # $ % ^ & * ( ), brackets y operadores).
+ *   _RAISE  : F1..F12 en fila numerica + flechas inverted-T (I/J/K/L) + nav (Home/End/PgUp/PgDn).
+ *   _NUMPAD : numpad 10-key (mano izq); tri-layer, se activa con LOWER + RAISE a la vez.
  *
  * Este programa es software libre bajo GNU GPL v2 o posterior.
  */
@@ -16,7 +17,8 @@
 enum sofle_layers {
     _BASE,
     _LOWER,
-    _RAISE
+    _RAISE,
+    _NUMPAD   // tri-layer: se activa con LOWER + RAISE a la vez
 };
 
 enum custom_keycodes {
@@ -63,22 +65,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_ENT,        KC_SPC,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
-  /* _LOWER — numpad 10-key (izq) + simbolos de programacion (der)
-   * Numpad sobre W-E-R / S-D-F / X-C-V :
-   *   sup : _ 7 8 9 _    home : _ 4 5 6 _    inf : 0 1 2 3 _
-   * Simbolos der (layout US):
-   *   sup : ^ & * ( )      home : - = [ ] \      inf : { } | ? '
+  /* _LOWER — simbolos estandar (mismo layout que el Corne, respeta el teclado US)
+   * Fila de arriba = fila de numeros con Shift, en orden:  ! @ # $ %  ^ & * ( )
+   * Home = solo los "raros" reubicados:  [ ] { } |   _ - + = \ `
+   * (la fila numerica queda transparente -> seguis teniendo 1..0 de la base)
    * ,-----------------------------------------.                    ,-----------------------------------------.
-   * |    | _  | 7  | 8  | 9  | _  |            | ^  | &  | *  | (  | )  |Bspc|
-   * |    | _  | 4  | 5  | 6  | _  |            | -  | =  | [  | ]  | \  | |  |
-   * |    | 0  | 1  | 2  | 3  | _  |Mute| |Mute| {  | }  | ?  | '  | "  |    |
+   * |    |    |    |    |    |    |            |    |    |    |    |    |    |
+   * |Tab | !  | @  | #  | $  | %  |            | ^  | &  | *  | (  | )  |Bspc|
+   * |Ctrl| [  | ]  | {  | }  | |  |            | _  | -  | +  | =  | \  | `  |
+   * |Shft|    |    |    |    |    |Mute| |Mute|    |    |    |    |    | ~  |
    * `----------| GUI | Alt | Ctl |     |Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_LOWER] = LAYOUT(
-    _______, XXXXXXX, KC_7,    KC_8,    KC_9,    XXXXXXX,                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
-    _______, XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX,                       KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, KC_PIPE,
-    _______, KC_0,    KC_1,    KC_2,    KC_3,    XXXXXXX,                       KC_LCBR, KC_RCBR, KC_QUES, KC_QUOT, KC_DQUO, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+    KC_TAB,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+    KC_LCTL, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_UNDS, KC_MINS, KC_PLUS, KC_EQL,  KC_BSLS, KC_GRV,
+    KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD,
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
@@ -97,6 +99,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LCTL, HUI,     HUD,     UG_TOGG, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
     KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
+  ),
+
+  /* _NUMPAD — numpad 10-key mano izquierda (4ta capa, tri-layer LOWER+RAISE)
+   * Disposicion 10-key sobre W-E-R / S-D-F / X-C-V, con el 0 en la columna del pinky:
+   *   sup : 7 8 9    home : 4 5 6    inf : 1 2 3    (0 abajo-izq)
+   * ,-----------------------------------------.                    ,-----------------------------------------.
+   * |    |    |    |    |    |    |            |    |    |    |    |    |    |
+   * |    |    | 7  | 8  | 9  |    |            |    |    |    |    |    |    |
+   * |    |    | 4  | 5  | 6  |    |            |    |    |    |    |    |    |
+   * |    | 0  | 1  | 2  | 3  |    |Mute| |Mute|    |    |    |    |    |    |
+   * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|RAISE| Ctl | Alt | GUI |---'
+   */
+  [_NUMPAD] = LAYOUT(
+    _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+    _______, XXXXXXX, KC_7,    KC_8,    KC_9,    XXXXXXX,                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX,                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_0,    KC_1,    KC_2,    KC_3,    XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                       _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______
   )
 };
 
@@ -149,6 +169,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         return state;
     }
     switch (get_highest_layer(state)) {
+        case _NUMPAD:
+            rgblight_sethsv_noeeprom(HSV_BLUE);
+            break;
         case _RAISE:
             rgblight_sethsv_noeeprom(HSV_GREEN);
             break;
@@ -300,9 +323,12 @@ static void render_dog(int DOG_X, int DOG_Y) {
 }
 
 static void render_layer(void) {
-    oled_write_P(PSTR("RAISE"), layer_state_is(_RAISE));
-    oled_write_P(PSTR("BASE\n"), layer_state_is(_BASE));
-    oled_write_P(PSTR("LOWER"), layer_state_is(_LOWER));
+    switch (get_highest_layer(layer_state)) {
+        case _NUMPAD: oled_write_P(PSTR("NUMPD"), false); break;
+        case _RAISE:  oled_write_P(PSTR("RAISE"), false); break;
+        case _LOWER:  oled_write_P(PSTR("LOWER"), false); break;
+        default:      oled_write_P(PSTR("BASE "), false); break;
+    }
 }
 
 static void render_hsv(void) {
@@ -487,6 +513,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_LOWER);
             }
+            update_tri_layer(_LOWER, _RAISE, _NUMPAD);
             return false;
 
         case RAISE:
@@ -495,6 +522,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_RAISE);
             }
+            update_tri_layer(_LOWER, _RAISE, _NUMPAD);
             return false;
 
 #ifdef OLED_ENABLE
