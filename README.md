@@ -1,167 +1,196 @@
-# sofle-config
+# ⌨️ sofle-config
 
-Configuración QMK del teclado **Sofle RGB** (keymap `mario`), puro por código, sin VIA.
-Portado desde mi config del Corne (https://github.com/valianx/corne-config) al Sofle, que suma fila numérica dedicada, 5 thumbs por mano y rotary encoders.
+**QMK** configuration for the **Sofle RGB** keyboard (keymap `valian`) — pure code, no VIA.
+Ported from my [Corne config](https://github.com/valianx/corne-config) to the Sofle, which adds a dedicated number row, 5 thumb keys per hand and rotary encoders.
 
-## Hardware
+![Keymap](docs/keymap.svg)
 
-- **Teclado:** Sofle RGB (58 teclas, split, hot-swap, TRRS).
-- **Controladores:** Pro Micro (AVR atmega32u4). Flash ~28KB, muy ajustado → se usa `LTO_ENABLE`.
-- **OLED:** 0.91" SSD1306 en ambas mitades.
-- **RGB:** underglow (LEDs abajo, no per-key) → `RGBLIGHT`, no RGB Matrix.
-- **Encoders:** 2 rotary EC11 (uno por mano).
+> The diagram above is generated from `keymap.c` with [keymap-drawer](https://github.com/caksoylar/keymap-drawer). To regenerate it, see [How to iterate](#-how-to-iterate).
 
-## Target
+---
 
-- Keyboard: `sofle/rev1`
-- Keymap: `mario`
+## 🔩 Hardware
 
-## Estructura
+| | |
+|---|---|
+| **Keyboard** | Sofle RGB (58 keys, split, MX hot-swap, TRRS) |
+| **Controllers** | Pro Micro (AVR atmega32u4) — ~28KB flash, very tight → `LTO_ENABLE` |
+| **OLED** | 0.91" SSD1306 on both halves (270° rotation) |
+| **RGB** | underglow (bottom LEDs, not per-key) → `RGBLIGHT`, not RGB Matrix |
+| **Encoders** | 2 rotary EC11 (one per hand) |
 
-```
-sofle-config/
-├── qmk.json                                  # registra el build target como external userspace
-├── keyboards/sofle/keymaps/mario/
-│   ├── config.h                              # tapping term, OLED, rgblight, ahorro de flash
-│   ├── rules.mk                              # features (LTO, RGBLIGHT, ENCODER, OLED), VIA off
-│   └── keymap.c                              # 3 capas, tap-dance, encoder, OLED (perro/gato), RGB por capa
-├── .gitignore
-└── README.md
-```
+**QMK target:** `sofle/rev1` · keymap `valian`
 
-### Nota sobre external userspace
+---
 
-Este repo es un **QMK external userspace**: no contiene el firmware de QMK, solo el keymap.
-QMK moderno permite compilar un keymap que vive fuera del árbol de `qmk_firmware`.
+## 🗂️ Layers
 
-1. Tener `qmk_firmware` clonado y el CLI de QMK instalado (`python3 -m pip install qmk`, luego `qmk setup`).
-2. Apuntar el CLI a este userspace:
-   ```
-   qmk config user.overlay_dir="$(realpath .)"
-   ```
-   (ejecutado desde la raíz de este repo).
-3. Compilar/flashear normalmente con el target `sofle/rev1 -km mario`.
+Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` is a tri-layer**: activated by holding **LOWER + RAISE at the same time**.
 
-Alternativa sin overlay: copiar `keyboards/sofle/keymaps/mario/` dentro de tu clon de `qmk_firmware` en la misma ruta y compilar desde ahí.
-
-## Compilar y flashear
+### `_BASE` — QWERTY + number row (gaming-friendly)
 
 ```
-# Compilar (genera el .hex)
-qmk compile -kb sofle/rev1 -km mario
-
-# Flashear (entra en modo flash y graba)
-qmk flash -kb sofle/rev1 -km mario
+,-----------------------------------------.                ,-----------------------------------------.
+|  `  |  1  |  2  |  3  |  4  |  5  |                      |  6  |  7  |  8  |  9  |  0  |  =  |
+| Tab |  Q  |  W  |  E  |  R  |  T  |                      |  Y  |  U  |  I  |  O  |  P  | Bsp |
+| Ctrl|  A  |  S  |  D  |  F  |  G  |                      |  H  |  J  |  K  |  L  |  ;  |  '  |
+| TDsf|  Z  |  X  |  C  |  V  |  B  |Mute |          |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
+            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|RAISE| Ctrl| Alt | GUI |
+            `-----------------------------'          `-----------------------------'
 ```
 
-### Poner cada mitad en bootloader (RESET)
+- **TDsf** = tap-dance: 1 tap = `Shift`, 2 taps = `Caps Lock`.
+- Numbers 1-0 live on the top row (handy for games).
+- **Encoder:** rotate = volume ↑/↓ · press = `Mute`.
 
-El Pro Micro no tiene reset por software por defecto, así que se hace por hardware:
-
-1. Conectá **una** mitad por USB.
-2. Puenteá los pines **RST** y **GND** del Pro Micro **dos veces seguidas, rápido** (doble toque), o presioná el botón de reset si tu PCB lo trae.
-3. La placa entra en modo bootloader (~8s) — ahí `qmk flash` la graba.
-4. Repetí con la **otra mitad** (conectála por USB y volvé a hacer el doble reset).
-
-> Ambas mitades llevan el **mismo** firmware. `SPLIT_USB_DETECT` hace que la mitad conectada por USB sea la master automáticamente.
-
-## Capas
-
-Tres capas: `_BASE`, `_LOWER`, `_RAISE`. `LOWER` y `RAISE` son momentáneas (se activan mientras se mantiene la tecla).
-
-### Capa 0 — _BASE (QWERTY + fila numérica, pensada para gaming)
+### `_LOWER` — standard symbols (same as the Corne)
 
 ```
-,-----------------------------------------.                    ,-----------------------------------------.
-|  `  |  1  |  2  |  3  |  4  |  5  |                          |  6  |  7  |  8  |  9  |  0  |  =  |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-| Tab |  Q  |  W  |  E  |  R  |  T  |                          |  Y  |  U  |  I  |  O  |  P  | Bsp |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-| Ctrl|  A  |  S  |  D  |  F  |  G  |                          |  H  |  J  |  K  |  L  |  ;  |  '  |
-|-----+-----+-----+-----+-----+-----+-----.        ,-----+-----+-----+-----+-----+-----+-----+-----|
-| TDsf|  Z  |  X  |  C  |  V  |  B  |Mute |        |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
-`-----------------+-----+-----+-----+-----+-----.  ,-----+-----+-----+-----+-----------------------'
-                  | GUI | Alt | Ctrl|LOWER|Enter|  |Space|RAISE| Ctrl| Alt | GUI |
-                  `-----------------------------'  `-----------------------------'
+,-----------------------------------------.                ,-----------------------------------------.
+|     |     |     |     |     |     |                      |     |     |     |     |     |     |
+| Tab |  !  |  @  |  #  |  $  |  %  |                      |  ^  |  &  |  *  |  (  |  )  | Bsp |
+| Ctrl|  [  |  ]  |  {  |  }  |  |  |                      |  _  |  -  |  +  |  =  |  \  |  `  |
+|Shift|     |     |     |     |     |Mute |          |Mute |     |     |     |     |  ~  |     |
+            | GUI | Alt | Ctrl|     |Enter|          |Space|RAISE| Ctrl| Alt | GUI |
+            `-----------------------------'          `-----------------------------'
 ```
 
-- **TDsf** = tap-dance: 1 pulso = `Shift`, 2 pulsos = `Caps Lock`.
-- Los `! @ # $ % ^ & * ( )` salen con `Shift` + número.
-- **Encoder (base):** girar = volumen ↑/↓. Push de encoder = `Mute`.
+- The top row matches a US keyboard: it's **the number row with Shift, in order** (`! @ # $ %  ^ & * ( )`). Nothing new to learn.
+- Only the "awkward" symbols are relocated to the home row: `[ ] { } |` and `_ - + = \ \``.
+- The number row stays transparent → you still get 1-0 from the base.
+- **Encoder:** rotate = `PgUp` / `PgDn`.
 
-### Capa 1 — _LOWER (numpad 10-key izq + símbolos de programación der)
-
-```
-,-----------------------------------------.                    ,-----------------------------------------.
-|     |     |  7  |  8  |  9  |     |                          |  ^  |  &  |  *  |  (  |  )  | Bsp |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-|     |     |  4  |  5  |  6  |     |                          |  -  |  =  |  [  |  ]  |  \  |  |  |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-|     |  0  |  1  |  2  |  3  |     |                          |  {  |  }  |  ?  |  '  |  "  |     |
-|-----+-----+-----+-----+-----+-----+-----.        ,-----+-----+-----+-----+-----+-----+-----+-----|
-|     |     |     |     |     |     |     |        |     |     |     |     |     |     |     |
-`-----------------+-----+-----+-----+-----+-----.  ,-----+-----+-----+-----------------------------'
-                  |     |     |     |     |Enter|  |Space|RAISE|     |     |     |
-                  `-----------------------------'  `-----------------------------'
-```
-
-- Numpad sobre las columnas W-E-R / S-D-F / X-C-V de la mano izquierda.
-- **Encoder (lower):** girar = `PgUp` / `PgDn` (scroll de página).
-
-### Capa 2 — _RAISE (F-keys en fila numérica + flechas inverted-T)
+### `_RAISE` — F1-F12 + inverted-T arrows (I/J/K/L)
 
 ```
-,-----------------------------------------.                    ,-----------------------------------------.
-|     | F1  | F2  | F3  | F4  | F5  |                          | F6  | F7  | F8  | F9  | F10 | F11 |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-|     |     |     |     |     |     |                          |PgUp |Home |  ↑  |End  | F12 | Bsp |
-|-----+-----+-----+-----+-----+-----|                          |-----+-----+-----+-----+-----+-----|
-| Ctrl| HUI | HUD |RGBtg|     |     |                          |PgDn |  ←  |  ↓  |  →  |     |     |
-|-----+-----+-----+-----+-----+-----+-----.        ,-----+-----+-----+-----+-----+-----+-----+-----|
-|Shift|     |     |     |     |     |     |        |     |     |     |     |     |     |     |
-`-----------------+-----+-----+-----+-----+-----.  ,-----+-----+-----+-----------------------------'
-                  |     |     |     |LOWER|Enter|  |Space|     |     |     |     |
-                  `-----------------------------'  `-----------------------------'
+,-----------------------------------------.                ,-----------------------------------------.
+|     | F1  | F2  | F3  | F4  | F5  |                      | F6  | F7  | F8  | F9  | F10 | F11 |
+|     |     |     |     |     |     |                      |PgUp |Home |  ↑  | End | F12 | Bsp |
+| Ctrl|     |     |     |     |     |                      |PgDn |  ←  |  ↓  |  →  |     |     |
+|Shift|     |     |     |     |     |Mute |          |Mute |     |     |     |     |     |     |
+            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|     | Ctrl| Alt | GUI |
+            `-----------------------------'          `-----------------------------'
 ```
 
-- Flechas **inverted-T** en la mano derecha: `I` = ↑, `J` = ←, `K` = ↓, `L` = →.
-  Las F-keys van en la fila numérica (fila 0), por eso no chocan con `I/J/K/L` (filas 1-2).
-- `HUI` / `HUD` = subir / bajar el hue del RGB. `RGBtg` = encender/apagar el RGB.
-- **Encoder (raise):** girar = `Ctrl+Tab` / `Ctrl+Shift+Tab` (siguiente / anterior pestaña o track).
+- **Inverted-T** arrows on the right hand: `I` = ↑, `J` = ←, `K` = ↓, `L` = →.
+- F-keys sit on the number row, so they don't collide with `I/J/K/L`.
+- RGB / light controls were moved to the 4th layer (`_NUMPAD`, left hand).
+- **Encoder:** rotate = `Ctrl+Tab` / `Ctrl+Shift+Tab` (switch tab/track).
 
-## RGB por capa
+### `_NUMPAD` — lights/config (left) + 10-key numpad (right) · tri-layer
 
-El color del underglow cambia según la capa activa (vía `rgblight`):
+```
+,-----------------------------------------.                ,-----------------------------------------.
+|     |     |     |     |     |     |                      |     |     |     |     |     |     |
+|     |Tog  |Mode+|Hue+ |Sat+ |Val+ |                      |     |  7  |  8  |  9  |     |     |
+|     |Boot |Mode-|Hue- |Sat- |Val- |                      |     |  4  |  5  |  6  |     |     |
+|     |EEclr|     |Spd- |Spd+ |     |Mute |          |Mute |     |  1  |  2  |  3  |  0  |     |
+            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|RAISE| Ctrl| Alt | GUI |
+            `-----------------------------'          `-----------------------------'
+```
 
-| Capa    | Color                         |
-|---------|-------------------------------|
-| _BASE   | hue dinámico (ajustable con HUI/HUD) |
-| _LOWER  | rojo                          |
-| _RAISE  | verde                         |
-| Caps Lock activo | oro (dorado), tiene prioridad |
+- **Right hand:** 10-key numpad (`7-8-9 / 4-5-6 / 1-2-3`, with `0` next to `3`). Fast number entry without leaving the mouse.
+- **Left hand:** keyboard / light controls — `Tog` RGB on/off, `Hue±`, `Sat±`, `Val±` (brightness), `Mode±` (effect), `Spd±` (speed), `Boot` (jump to bootloader for flashing), `EEclr` (clear EEPROM).
 
-## OLED
+---
 
-- **Master:** animación de **perro** (96px, reacciona a Caps→ladra, Ctrl→sneak, GUI→camina, RAlt→corre, Space→salta) + indicador de capa + valores HSV.
-- **Slave:** animación de **gato** (320px, idle vs. tap según WPM) + contador de WPM.
-- Rotación 270 en ambas. Se apaga sola tras 60s sin tipeo.
+## 🌈 Per-layer RGB
 
-## Estado de compilación
+The underglow color changes with the active layer (`rgblight`):
 
-> **Pendiente de verificación del operador.** `qmk` no estaba instalado en la máquina donde se generó este repo, así que el firmware **no fue compilado** todavía. Ejecutá `qmk compile -kb sofle/rev1 -km mario` para validar que entra en el Pro Micro.
+| Layer | Color |
+|---|---|
+| `_BASE` | dynamic hue (adjust with Hue+/Hue- on `_NUMPAD`) |
+| `_LOWER` | red |
+| `_RAISE` | green |
+| `_NUMPAD` | blue |
+| Caps Lock on | gold (takes priority) |
 
-### Trade-off de flash (Pro Micro, ~28KB)
+> The full per-layer reference (positions, keycodes, design rationale) lives in [`docs/layout.md`](docs/layout.md).
 
-El binario está al límite: rgblight + encoder + tap-dance + WPM + OLED driver + arte del perro (96px×10 frames) + arte del gato (320px×3 frames). El gato es el mayor consumidor de PROGMEM.
+## 🖥️ OLED
 
-Si `qmk compile` reporta **overflow de flash**, recortar en este orden (de menor a mayor pérdida funcional):
+- **Master:** **dog** animation (96px — Caps→barks, Ctrl→sneaks, GUI→walks, RAlt→runs, Space→jumps) + active layer + HSV values.
+- **Slave:** **cat** animation (320px — idle vs. tap based on WPM) + WPM counter.
+- Turns itself off after 60s of inactivity.
 
-1. **Quitar el efecto breathing del RGB:** borrar `#define RGBLIGHT_EFFECT_BREATHING` en `config.h`.
-2. **Reemplazar el gato (320px) por arte estático chico** (una "luna" ~32px) o eliminar `render_cat()` y dejar solo el WPM en el slave.
-3. **Quitar el perro** y dejar solo texto de capa + WPM en ambas pantallas.
+---
 
-El orden de prioridad de la config es: **keymap > encoder > RGB por capa > OLED animado**. El keymap y el encoder nunca se recortan.
+## 🔁 How to iterate
 
-## Licencia
+The flow to change the keyboard is: **edit → compile → redraw → flash**.
 
-GPL v2 o posterior (igual que QMK).
+```bash
+# 1. Edit the layout
+#    keyboards/sofle/keymaps/valian/keymap.c
+
+# 2. Compile (builds the .hex and checks it fits the Pro Micro)
+qmk compile -kb sofle/rev1 -km valian
+
+# 3. Regenerate the README diagram
+export PYTHONUTF8=1
+qmk c2json -kb sofle/rev1 -km valian --no-cpp -o sofle.json
+keymap parse -q sofle.json > docs/keymap.yaml
+keymap draw docs/keymap.yaml > docs/keymap.svg
+
+# 4. Flash (RESET each half when prompted)
+qmk flash -kb sofle/rev1 -km valian
+```
+
+### Putting each half into bootloader (RESET)
+
+The Pro Micro has no software reset by default:
+
+1. Plug in **one** half via USB.
+2. Double-tap the RESET button quickly (or short `RST`↔`GND` twice in a row).
+3. It enters bootloader (~8s) → `qmk flash` writes it.
+4. Repeat with the **other** half. Both halves carry the same firmware.
+
+> Tip: the `Boot` key on `_NUMPAD` (left hand) jumps to the bootloader without touching the physical RESET.
+
+---
+
+## ⚙️ Toolchain setup
+
+This repo is a **QMK external userspace** (it does not contain the QMK firmware, only the keymap).
+
+```bash
+# QMK CLI + firmware
+pip install qmk           # or: uv tool install qmk
+qmk setup                 # clones qmk_firmware + submodules
+
+# Point the CLI at this userspace (from the repo root)
+qmk config user.overlay_dir="$(pwd)"
+```
+
+For AVR (Pro Micro) you need `avr-gcc` + `make`. On Linux/Mac `qmk setup` is enough.
+
+> **⚠️ Windows note (git-bash / MSYS):** the native `make` bundled with `avr-gcc` corrupts long recipes when handing them to the MSYS `sh`, and the build fails with `unexpected EOF ... matching '`. Fix: use an **MSYS2/cygwin `make`** (GNU Make 4.4.1 "Built for x86_64-pc-cygwin") and put it on `PATH` **before** the `avr-gcc` bin. Simpler alternative: use **[QMK MSYS](https://msys.qmk.fm/)**, which ships a consistent toolchain.
+
+---
+
+## 💾 Prebuilt firmware
+
+A ready-to-flash build is committed at [`firmware/sofle_rev1_valian.hex`](firmware/sofle_rev1_valian.hex), so you can flash without recompiling (e.g. from a machine without the toolchain):
+
+```bash
+# With the QMK CLI (auto-detects the bootloader):
+qmk flash firmware/sofle_rev1_valian.hex
+
+# Or directly with avrdude (replace COMx with the port shown in bootloader):
+avrdude -c avr109 -p atmega32u4 -P COMx -U flash:w:firmware/sofle_rev1_valian.hex:i
+```
+
+Flash each half (put it in bootloader first — see above). Keep this `.hex` in sync when you change the keymap.
+
+## ✅ Status
+
+Builds for `sofle/rev1` (Pro Micro): **25414 / 28672 bytes (88%, 3258 free)** — with animated OLED, per-layer RGB, encoders and tap-dance, no cuts.
+
+### VIA backup
+
+[`via-backup/sofle_v1.layout.json`](via-backup/sofle_v1.layout.json) holds the previous VIA layout backup, in case you want to revert or re-import it into the [VIA app](https://usevia.app).
+
+## 📄 License
+
+GPL v2 or later (same as QMK).

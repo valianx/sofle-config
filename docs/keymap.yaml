@@ -1,0 +1,187 @@
+layout: {qmk_keyboard: sofle/rev1, layout_name: LAYOUT}
+layers:
+  L0: ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '=', TAB, Q, W, E, R, T, Y, U, I, O, P, BSPC, LCTL, A, S, D, F, G, H, J, K, L, ;, '''', TD(TD CAPLOCK),
+    Z, X, C, V, B, MUTE, MUTE, N, M, ',', ., /, RSFT, LGUI, LALT, LCTL, LOWER, ENT, SPC, RAISE, RCTL, RALT, RGUI]
+  L1:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - TAB
+  - '!'
+  - '@'
+  - '#'
+  - $
+  - '%'
+  - ^
+  - '&'
+  - '*'
+  - (
+  - )
+  - BSPC
+  - LCTL
+  - '['
+  - ']'
+  - '{'
+  - '}'
+  - '|'
+  - _
+  - '-'
+  - +
+  - '='
+  - \
+  - '`'
+  - LSFT
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - '~'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - RAISE
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L2:
+  - ''
+  - F1
+  - F2
+  - F3
+  - F4
+  - F5
+  - F6
+  - F7
+  - F8
+  - F9
+  - F10
+  - F11
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - PGUP
+  - HOME
+  - UP
+  - END
+  - F12
+  - BSPC
+  - LCTL
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - PGDN
+  - LEFT
+  - DOWN
+  - RGHT
+  - ''
+  - ''
+  - LSFT
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - LOWER
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L3:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - UG TOGG
+  - UG NEXT
+  - HUI
+  - UG SATU
+  - UG VALU
+  - ''
+  - '7'
+  - '8'
+  - '9'
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - QK BOOT
+  - UG PREV
+  - HUD
+  - UG SATD
+  - UG VALD
+  - ''
+  - '4'
+  - '5'
+  - '6'
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - EE CLR
+  - ''
+  - UG SPDD
+  - UG SPDU
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - '1'
+  - '2'
+  - '3'
+  - '0'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
