@@ -5,6 +5,9 @@
 *.elf
 .build/
 
+# Excepcion: el firmware listo para flashear si versiona (firmware/)
+!/firmware/*.hex
+
 # --- Clon de qmk_firmware (no versionar dentro de este userspace) ---
 /qmk_firmware/
 

@@ -1,13 +1,13 @@
 /* Copyright 2023 valianx
  *
- * Keymap "mario" para Sofle RGB (sofle/rev1), controladores Pro Micro (atmega32u4).
+ * Keymap "valian" para Sofle RGB (sofle/rev1), controladores Pro Micro (atmega32u4).
  * Keymap puro por codigo, sin VIA. Portado desde valianx/corne-config.
  *
  * Capas:
  *   _BASE   : QWERTY + fila numerica + thumbs; tap-dance shift/caps; KC_MUTE en push de encoder.
  *   _LOWER  : simbolos estandar (mismo layout que el Corne: ! @ # $ % ^ & * ( ), brackets y operadores).
  *   _RAISE  : F1..F12 en fila numerica + flechas inverted-T (I/J/K/L) + nav (Home/End/PgUp/PgDn).
- *   _NUMPAD : numpad 10-key (mano izq); tri-layer, se activa con LOWER + RAISE a la vez.
+ *   _NUMPAD : numpad 10-key (mano der) + controles de RGB/luces (mano izq); tri-layer (LOWER+RAISE).
  *
  * Este programa es software libre bajo GNU GPL v2 o posterior.
  */
@@ -89,33 +89,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    | F1 | F2 | F3 | F4 | F5 |            | F6 | F7 | F8 | F9 |F10 |F11 |
    * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Bspc|
-   * |Ctrl| HUI| HUD|RTOG|    |    |            |PgDn|Left|Down|Rght|    |    |
+   * |Ctrl|    |    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
    * |Shft|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |    |
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|     | Ctl | Alt | GUI |---'
+   * (controles de RGB/luces movidos a la 4ta capa _NUMPAD, mano izquierda)
    */
   [_RAISE] = LAYOUT(
     XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_BSPC,
-    KC_LCTL, HUI,     HUD,     UG_TOGG, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
+    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
     KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
   ),
 
-  /* _NUMPAD — numpad 10-key mano izquierda (4ta capa, tri-layer LOWER+RAISE)
-   * Disposicion 10-key sobre W-E-R / S-D-F / X-C-V, con el 0 en la columna del pinky:
-   *   sup : 7 8 9    home : 4 5 6    inf : 1 2 3    (0 abajo-izq)
+  /* _NUMPAD — controles de teclado/luces (mano izq) + numpad 10-key (mano der)
+   * (4ta capa, tri-layer LOWER+RAISE)
+   * Izq (luces/config):              Der (numpad sobre U-I-O / J-K-L / M-,-.):
+   *   Tog Nxt Hue+ Sat+ Val+           7 8 9
+   *   Boot Prv Hue- Sat- Val-          4 5 6
+   *   EEclr     Spd- Spd+              1 2 3 (0)
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
-   * |    |    | 7  | 8  | 9  |    |            |    |    |    |    |    |    |
-   * |    |    | 4  | 5  | 6  |    |            |    |    |    |    |    |    |
-   * |    | 0  | 1  | 2  | 3  |    |Mute| |Mute|    |    |    |    |    |    |
+   * |    |Tog |Nxt |Hue+|Sat+|Val+|            |    | 7  | 8  | 9  |    |    |
+   * |    |Boot|Prv |Hue-|Sat-|Val-|            |    | 4  | 5  | 6  |    |    |
+   * |    |EEcl|    |Spd-|Spd+|    |Mute| |Mute|    | 1  | 2  | 3  | 0  |    |
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_NUMPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
-    _______, XXXXXXX, KC_7,    KC_8,    KC_9,    XXXXXXX,                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX,                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, KC_0,    KC_1,    KC_2,    KC_3,    XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, UG_TOGG, UG_NEXT, HUI,     UG_SATU, UG_VALU,                       XXXXXXX, KC_7,    KC_8,    KC_9,    XXXXXXX, _______,
+    _______, QK_BOOT, UG_PREV, HUD,     UG_SATD, UG_VALD,                       XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX, _______,
+    _______, EE_CLR,  XXXXXXX, UG_SPDD, UG_SPDU, XXXXXXX, _______,    _______,  XXXXXXX, KC_1,    KC_2,    KC_3,    KC_0,    _______,
                        _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______
   )
 };

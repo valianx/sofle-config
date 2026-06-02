@@ -1,4 +1,4 @@
-# rules.mk del keymap "mario" para Sofle RGB (sofle/rev1).
+# rules.mk del keymap "valian" para Sofle RGB (sofle/rev1).
 # Keymap puro por codigo, sin VIA. Build AVR (Pro Micro / atmega32u4).
 
 # ---- Features activadas ----

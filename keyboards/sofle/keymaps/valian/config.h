@@ -1,6 +1,6 @@
 /* Copyright 2023 valianx
  *
- * config.h del keymap "mario" para Sofle RGB (sofle/rev1).
+ * config.h del keymap "valian" para Sofle RGB (sofle/rev1).
  * Keymap puro por codigo, sin VIA. Portado desde valianx/corne-config.
  *
  * Software libre bajo GNU GPL v2 o posterior.
