@@ -1,15 +1,15 @@
 /* Copyright 2023 valianx
  *
- * Keymap "valian" para Sofle RGB (sofle/rev1), controladores Pro Micro (atmega32u4).
- * Keymap puro por codigo, sin VIA. Portado desde valianx/corne-config.
+ * Keymap "valian" for the Sofle RGB (sofle/rev1), Pro Micro controllers (atmega32u4).
+ * Pure-code keymap, no VIA. Ported from valianx/corne-config.
  *
- * Capas:
- *   _BASE   : QWERTY + fila numerica + thumbs; tap-dance shift/caps; KC_MUTE en push de encoder.
- *   _LOWER  : simbolos estandar (mismo layout que el Corne: ! @ # $ % ^ & * ( ), brackets y operadores).
- *   _RAISE  : F1..F12 en fila numerica + flechas inverted-T (I/J/K/L) + nav (Home/End/PgUp/PgDn).
- *   _NUMPAD : numpad 10-key (mano der) + controles de RGB/luces (mano izq); tri-layer (LOWER+RAISE).
+ * Layers:
+ *   _BASE   : QWERTY + number row + thumbs; tap-dance shift/caps; KC_MUTE on encoder press.
+ *   _LOWER  : standard symbols (same layout as the Corne: ! @ # $ % ^ & * ( ), brackets and operators).
+ *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn).
+ *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
  *
- * Este programa es software libre bajo GNU GPL v2 o posterior.
+ * This program is free software under the GNU GPL v2 or later.
  */
 
 #include QMK_KEYBOARD_H
@@ -18,7 +18,7 @@ enum sofle_layers {
     _BASE,
     _LOWER,
     _RAISE,
-    _NUMPAD   // tri-layer: se activa con LOWER + RAISE a la vez
+    _NUMPAD   // tri-layer: activated by holding LOWER + RAISE together
 };
 
 enum custom_keycodes {
@@ -32,7 +32,7 @@ enum td_keycodes {
     TD_CAPLOCK
 };
 
-// Tap dance: un pulso = Left Shift, doble pulso = Caps Lock.
+// Tap dance: single tap = Left Shift, double tap = Caps Lock.
 tap_dance_action_t tap_dance_actions[] = {
     [TD_CAPLOCK] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
 };
@@ -40,16 +40,16 @@ tap_dance_action_t tap_dance_actions[] = {
 /* ====================================================================
  * KEYMAPS
  *
- * Macro LAYOUT del Sofle rev1 (50 slots):
- *   Fila numerica : 6 izq | 6 der
- *   Fila superior : 6 izq | 6 der
- *   Fila home     : 6 izq | 6 der
- *   Fila inferior : 6 izq | ENC_L | ENC_R | 6 der
- *   Thumbs        : 5 izq | 5 der
+ * Sofle rev1 LAYOUT macro:
+ *   Number row : 6 left | 6 right
+ *   Top row    : 6 left | 6 right
+ *   Home row   : 6 left | 6 right
+ *   Bottom row : 6 left | ENC_L | ENC_R | 6 right
+ *   Thumbs     : 5 left | 5 right
  * ==================================================================== */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  /* _BASE — QWERTY + numeros en la fila de arriba (para gaming)
+  /* _BASE — QWERTY + numbers on the top row (gaming-friendly)
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * | `  |  1 |  2 |  3 |  4 |  5 |            |  6 |  7 |  8 |  9 |  0 |  =  |
    * |Tab | Q  | W  | E  | R  | T  |            | Y  | U  | I  | O  | P  |Bspc|
@@ -65,10 +65,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_ENT,        KC_SPC,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
-  /* _LOWER — simbolos estandar (mismo layout que el Corne, respeta el teclado US)
-   * Fila de arriba = fila de numeros con Shift, en orden:  ! @ # $ %  ^ & * ( )
-   * Home = solo los "raros" reubicados:  [ ] { } |   _ - + = \ `
-   * (la fila numerica queda transparente -> seguis teniendo 1..0 de la base)
+  /* _LOWER — standard symbols (same layout as the Corne, matches the US keyboard)
+   * Top row = the number row with Shift, in order:  ! @ # $ %  ^ & * ( )
+   * Home = only the "awkward" ones relocated:  [ ] { } |   _ - + = \ `
+   * (the number row stays transparent -> you still get 1..0 from base)
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
    * |Tab | !  | @  | #  | $  | %  |            | ^  | &  | *  | (  | )  |Bspc|
@@ -84,15 +84,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
-  /* _RAISE — F-keys en la fila numerica + flechas inverted-T (I/J/K/L) + nav
-   * Flechas:  I = ^ (arriba, fila superior),  J = < ,  K = v ,  L = >  (home row)
+  /* _RAISE — F-keys on the number row + inverted-T arrows (I/J/K/L) + nav
+   * Arrows:  I = ^ (up, top row),  J = < ,  K = v ,  L = >  (home row)
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    | F1 | F2 | F3 | F4 | F5 |            | F6 | F7 | F8 | F9 |F10 |F11 |
    * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Bspc|
    * |Ctrl|    |    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
    * |Shft|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |    |
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|     | Ctl | Alt | GUI |---'
-   * (controles de RGB/luces movidos a la 4ta capa _NUMPAD, mano izquierda)
+   * (RGB/light controls moved to the 4th layer _NUMPAD, left hand)
    */
   [_RAISE] = LAYOUT(
     XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
@@ -102,9 +102,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
   ),
 
-  /* _NUMPAD — controles de teclado/luces (mano izq) + numpad 10-key (mano der)
-   * (4ta capa, tri-layer LOWER+RAISE)
-   * Izq (luces/config):              Der (numpad sobre U-I-O / J-K-L / M-,-.):
+  /* _NUMPAD — keyboard/light controls (left hand) + 10-key numpad (right hand)
+   * (4th layer, tri-layer LOWER+RAISE)
+   * Left (lights/config):            Right (numpad over U-I-O / J-K-L / M-,-.):
    *   Tog Nxt Hue+ Sat+ Val+           7 8 9
    *   Boot Prv Hue- Sat- Val-          4 5 6
    *   EEclr     Spd- Spd+              1 2 3 (0)
@@ -126,9 +126,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* ====================================================================
  * ENCODERS
- *   _BASE  : volumen (ambos encoders).
- *   _LOWER : scroll de pagina (PgUp/PgDn).
- *   _RAISE : cambio de pestaña/track (Ctrl+Tab / Ctrl+Shift+Tab).
+ *   _BASE  : volume (both encoders).
+ *   _LOWER : page scroll (PgUp/PgDn).
+ *   _RAISE : switch tab/track (Ctrl+Tab / Ctrl+Shift+Tab).
  * ==================================================================== */
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
@@ -138,9 +138,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             break;
         case _RAISE:
             if (clockwise) {
-                tap_code16(C(KC_TAB));         // siguiente pestaña/track
+                tap_code16(C(KC_TAB));         // next tab/track
             } else {
-                tap_code16(C(S(KC_TAB)));      // pestaña/track anterior
+                tap_code16(C(S(KC_TAB)));      // previous tab/track
             }
             break;
         case _BASE:
@@ -153,11 +153,12 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 #endif
 
 /* ====================================================================
- * RGB POR CAPA (rgblight, underglow)
- *   _BASE  : hue dinamico controlado por HUI/HUD.
- *   _LOWER : rojo.
- *   _RAISE : verde.
- *   Caps Lock activo: oro (dorado), tiene prioridad.
+ * PER-LAYER RGB (rgblight, underglow)
+ *   _BASE  : dynamic hue controlled by HUI/HUD.
+ *   _LOWER : red.
+ *   _RAISE : green.
+ *   _NUMPAD: blue.
+ *   Caps Lock on: gold, takes priority.
  * ==================================================================== */
 uint8_t current_hue;
 uint8_t current_val;
@@ -191,19 +192,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 /* ====================================================================
- * OLED — animaciones reactivas portadas del Corne
- *   Master : perro (96px, reacciona a mods/caps/WPM) + capa + HSV.
- *   Slave  : gato (320px, idle vs tap segun WPM) + WPM.
- *   Rotacion 270 en ambas.
+ * OLED — reactive animations ported from the Corne
+ *   Master : dog (96px, reacts to mods/caps/WPM) + layer + HSV.
+ *   Slave  : cat (320px, idle vs tap based on WPM) + WPM.
+ *   Both rotated 270.
  *
- *   Trade-off de flash: el gato (320px x 3 frames) es el mayor consumidor
- *   de PROGMEM. Si qmk reporta overflow del Pro Micro, el orden de recorte
- *   documentado en el README es: breathing rgblight -> gato por luna chica
- *   -> dejar solo texto. NO se ha compilado en esta maquina (qmk ausente).
+ *   Flash trade-off: the cat (320px x 3 frames) is the biggest PROGMEM
+ *   consumer. If qmk reports a Pro Micro overflow, the trim order documented
+ *   in the README is: rgblight breathing -> swap the cat for a small moon
+ *   -> text only.
  * ==================================================================== */
 #ifdef OLED_ENABLE
 
-#define WPM_TAP 15              // umbral WPM para que el gato empiece a tipear
+#define WPM_TAP 15              // WPM threshold for the cat to start typing
 #define ANIM_FRAME_DURATION 200
 #define ANIM_SIZE_DOG 96
 #define ANIM_SIZE_CAT 320
@@ -437,7 +438,7 @@ static void render_cat(void) {
 }
 
 static void render_wpm(void) {
-    uint8_t wpm = current_wpm;  // copia local: no mutar la global con /= 10
+    uint8_t wpm = current_wpm;  // local copy: don't mutate the global with /= 10
     oled_write("WPM\n", false);
     wpm_str[3] = '\0';
     wpm_str[2] = '0' + wpm % 10;
@@ -468,7 +469,7 @@ bool oled_task_user(void) {
     }
 
     if (is_keyboard_master()) {
-        // Perro + capa + HSV
+        // Dog + layer + HSV
         if (timer_elapsed32(anim_dog_timer) > ANIM_FRAME_DURATION) {
             anim_dog_timer = timer_read32();
             render_dog(0, 1);
@@ -479,7 +480,7 @@ bool oled_task_user(void) {
         oled_set_cursor(0, 10);
         render_hsv();
     } else {
-        // Gato + WPM
+        // Cat + WPM
         if (timer_elapsed32(anim_cat_timer) > ANIM_FRAME_DURATION) {
             anim_cat_timer = timer_read32();
             render_cat();
@@ -493,20 +494,20 @@ bool oled_task_user(void) {
 #endif // OLED_ENABLE
 
 /* ====================================================================
- * PROCESS RECORD — custom keycodes + estado de animaciones del perro
+ * PROCESS RECORD — custom keycodes + dog animation state
  * ==================================================================== */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case HUI:
             if (record->event.pressed) {
-                current_hue += 5;  // wrap automatico de uint8_t
+                current_hue += 5;  // uint8_t wraps automatically
                 rgblight_sethsv_noeeprom(current_hue, 255, current_val);
             }
             return false;
 
         case HUD:
             if (record->event.pressed) {
-                current_hue -= 5;  // wrap automatico de uint8_t
+                current_hue -= 5;  // uint8_t wraps automatically
                 rgblight_sethsv_noeeprom(current_hue, 255, current_val);
             }
             return false;

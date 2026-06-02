@@ -1,45 +1,45 @@
 /* Copyright 2023 valianx
  *
- * config.h del keymap "valian" para Sofle RGB (sofle/rev1).
- * Keymap puro por codigo, sin VIA. Portado desde valianx/corne-config.
+ * config.h for the "valian" keymap on the Sofle RGB (sofle/rev1).
+ * Pure-code keymap, no VIA. Ported from valianx/corne-config.
  *
- * Software libre bajo GNU GPL v2 o posterior.
+ * Free software under the GNU GPL v2 or later.
  */
 
 #pragma once
 
 /* ---- Split ---- */
 #define SPLIT_USB_DETECT
-// La mitad conectada por USB se considera master; la otra, slave.
+// The USB-connected half becomes master; the other one, slave.
 
 /* ---- Tap dance ---- */
 #define TAPPING_TERM 200
-// Ventana para el doble pulso del tap dance (shift/caps).
-// El Corne usaba 400; se baja a 200 porque 400 hace sentir el shift lento al usarlo.
+// Window for the tap-dance double tap (shift/caps).
+// The Corne used 400; lowered to 200 because 400 makes shift feel sluggish.
 
 /* ---- OLED ---- */
 #define OLED_BRIGHTNESS 120
-// El timeout de OLED se maneja a mano en oled_task_user (apaga tras 60s sin tipeo).
+// The OLED timeout is handled manually in oled_task_user (off after 60s idle).
 
 /* ---- RGB underglow (rgblight) ---- */
 #ifdef RGBLIGHT_ENABLE
     #define RGBLIGHT_LIMIT_VAL 110
-    // Maximo Value (brillo) en HSV — protege el consumo por USB del Pro Micro.
+    // Max HSV Value (brightness) — protects the Pro Micro's USB power budget.
 
     #define RGBLIGHT_HUE_STEP 5
     #define RGBLIGHT_SAT_STEP 17
     #define RGBLIGHT_VAL_STEP 17
 
     #define RGBLIGHT_EFFECT_BREATHING
-    // Unico efecto incluido (ahorra flash frente a habilitar todos).
-    // Si qmk reporta overflow de flash, este es el primer recorte (ver README).
+    // Only effect included (saves flash vs enabling all of them).
+    // If qmk reports a flash overflow, this is the first thing to trim (see README).
 
-    // RGBLED_NUM / RGBLED_SPLIT NO se redefinen aqui: se usan los valores que
-    // el propio teclado (sofle/rev1) declara para su cadena underglow. Redefinirlos
-    // a un numero incorrecto (p. ej. el 54 del Corne) rompe el split del RGB.
+    // RGBLED_NUM / RGBLED_SPLIT are NOT redefined here: we use the values the
+    // keyboard (sofle/rev1) declares for its underglow chain. Redefining them to
+    // a wrong number (e.g. the Corne's 54) breaks the RGB split.
 #endif
 
-/* ---- Ahorro de flash (Pro Micro, ~28KB) ---- */
+/* ---- Flash savings (Pro Micro, ~28KB) ---- */
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
-// Compatibles con LTO_ENABLE; reducen tamaño del binario.
+// Compatible with LTO_ENABLE; reduce the binary size.
