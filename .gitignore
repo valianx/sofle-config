@@ -1,0 +1,20 @@
+# --- Artefactos de compilacion QMK ---
+*.hex
+*.bin
+*.uf2
+*.elf
+.build/
+
+# --- Clon de qmk_firmware (no versionar dentro de este userspace) ---
+/qmk_firmware/
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editores ---
+.vscode/
+.idea/
+*.swp
+*~
