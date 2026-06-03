@@ -4,7 +4,7 @@
  * Pure-code keymap, no VIA. Ported from valianx/corne-config.
  *
  * Layers:
- *   _BASE   : QWERTY + number row + thumbs; KC_MUTE on encoder press.
+ *   _BASE   : QWERTY + number row + thumbs. Left encoder: scroll + click = Snip (Win+Shift+S); right encoder: volume + click = Mute.
  *   _LOWER  : only the symbols unreachable elsewhere ([ ] { } | \ ` ~ - _); shifted-number symbols stay on _BASE.
  *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn) + Del + Snip (Win+Shift+S).
  *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
@@ -45,14 +45,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |Esc |  1 |  2 |  3 |  4 |  5 |            |  6 |  7 |  8 |  9 |  0 |  =  |
    * |Tab | Q  | W  | E  | R  | T  |            | Y  | U  | I  | O  | P  |Bspc|
    * |Shft| A  | S  | D  | F  | G  |            | H  | J  | K  | L  | ;  | '  |
-   * |Ctrl| Z  | X  | C  | V  | B  |Mute| |Mute| N  | M  | ,  | .  | /  |Shft|
+   * |Ctrl| Z  | X  | C  | V  | B  |Snip| |Mute| N  | M  | ,  | .  | /  |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Space| |Enter|RAISE| Ctl | Alt | GUI |---'
+   * (encoders: left = scroll / click Snip,  right = volume / click Mute)
    */
   [_BASE] = LAYOUT(
     KC_ESC,        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
     KC_TAB,        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_LSFT,       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-    KC_LCTL,       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,     KC_MUTE,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+    KC_LCTL,       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, LGUI(LSFT(KC_S)), KC_MUTE, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
                        KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,        KC_ENT,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
@@ -120,28 +121,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 /* ====================================================================
- * ENCODERS
- *   _BASE  : volume (both encoders).
- *   _LOWER : page scroll (PgUp/PgDn).
- *   _RAISE : switch tab/track (Ctrl+Tab / Ctrl+Shift+Tab).
+ * ENCODERS  (index 0 = LEFT half, index 1 = RIGHT half)
+ *   _BASE  : left = mouse scroll, right = volume.
+ *   _LOWER : page scroll (PgUp/PgDn), both encoders.
+ *   _RAISE : switch tab/track (Ctrl+Tab / Ctrl+Shift+Tab), both encoders.
+ *
+ *   Note: the Sofle's two halves declare mirrored encoder A/B pins, so the
+ *   `clockwise` flag means physically-opposite directions per half. The _BASE
+ *   branch below is tuned so a clockwise (rightward) turn raises volume / scrolls
+ *   down; flip the two tap_code lines for an encoder if its direction feels off.
  * ==================================================================== */
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    switch (get_highest_layer(layer_state)) {
-        case _LOWER:
-            if (clockwise) { tap_code(KC_PGDN); } else { tap_code(KC_PGUP); }
-            break;
-        case _RAISE:
-            if (clockwise) {
-                tap_code16(C(KC_TAB));         // next tab/track
-            } else {
-                tap_code16(C(S(KC_TAB)));      // previous tab/track
-            }
-            break;
-        case _BASE:
-        default:
-            if (clockwise) { tap_code(KC_VOLU); } else { tap_code(KC_VOLD); }
-            break;
+    uint8_t layer = get_highest_layer(layer_state);
+
+    // Layer overrides apply to both encoders.
+    if (layer == _LOWER) {
+        if (clockwise) { tap_code(KC_PGDN); } else { tap_code(KC_PGUP); }
+        return false;
+    }
+    if (layer == _RAISE) {
+        if (clockwise) {
+            tap_code16(C(KC_TAB));             // next tab/track
+        } else {
+            tap_code16(C(S(KC_TAB)));          // previous tab/track
+        }
+        return false;
+    }
+
+    // _BASE: left encoder scrolls, right encoder controls volume.
+    if (index == 0) {                          // left half -> scroll
+        if (clockwise) { tap_code(MS_WHLD); } else { tap_code(MS_WHLU); }
+    } else {                                   // right half -> volume
+        if (clockwise) { tap_code(KC_VOLD); } else { tap_code(KC_VOLU); }
     }
     return false;
 }

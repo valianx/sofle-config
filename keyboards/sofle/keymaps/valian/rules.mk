@@ -16,8 +16,10 @@ VIA_ENABLE      = no
 # ---- Flash: the Pro Micro is very tight (~28KB) ----
 LTO_ENABLE      = yes        # link-time optimization; shrinks the .hex a lot
 
+# ---- Mouse keys: needed for the left encoder scroll (MS_WHLU/MS_WHLD) ----
+MOUSEKEY_ENABLE     = yes
+
 # ---- Features disabled to save flash ----
-MOUSEKEY_ENABLE     = no
 CONSOLE_ENABLE      = no
 COMMAND_ENABLE      = no
 NKRO_ENABLE         = no
