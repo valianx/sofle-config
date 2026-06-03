@@ -5,7 +5,7 @@
  *
  * Layers:
  *   _BASE   : QWERTY + number row + thumbs; KC_MUTE on encoder press.
- *   _LOWER  : standard symbols (same layout as the Corne: ! @ # $ % ^ & * ( ), brackets and operators).
+ *   _LOWER  : only the symbols unreachable elsewhere ([ ] { } | \ ` ~ - _); shifted-number symbols stay on _BASE.
  *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn).
  *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
  *
@@ -56,22 +56,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,        KC_ENT,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
-  /* _LOWER — standard symbols (same layout as the Corne, matches the US keyboard)
-   * Top row = the number row with Shift, in order:  ! @ # $ %  ^ & * ( )
-   * Home = only the "awkward" ones relocated:  [ ] { } |   _ - + = \ `
-   * (the number row stays transparent -> you still get 1..0 from base)
+  /* _LOWER — only the symbols NOT reachable elsewhere, all on the home row.
+   * The shifted-number symbols (! @ # $ % ^ & * ( )) are intentionally absent:
+   * you already get them with Shift + the number row on _BASE. Likewise = and +
+   * live on _BASE (KC_EQL / Shift+=). So this layer keeps only the "unique" ones:
+   *   Home left :  [ ] { } |        Home right:  \ ` ~ - _
+   * The number row stays transparent -> you still get 1..0 while holding LOWER.
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
-   * |Tab | !  | @  | #  | $  | %  |            | ^  | &  | *  | (  | )  |Bspc|
-   * |Shft| [  | ]  | {  | }  | |  |            | _  | -  | +  | =  | \  | `  |
-   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    | ~  |Shft|
+   * |    |    |    |    |    |    |            |    |    |    |    |    |    |
+   * |Shft| [  | ]  | {  | }  | |  |            | \  | `  | ~  | -  | _  |    |
+   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |Shft|
    * `----------| GUI | Alt | Ctl |     |Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_LOWER] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
-    KC_TAB,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
-    KC_LSFT, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_UNDS, KC_MINS, KC_PLUS, KC_EQL,  KC_BSLS, KC_GRV,
-    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD, KC_RSFT,
+    _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+    KC_LSFT, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_BSLS, KC_GRV,  KC_TILD, KC_MINS, KC_UNDS, XXXXXXX,
+    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT,
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
