@@ -6,7 +6,7 @@
  * Layers:
  *   _BASE   : QWERTY + number row + thumbs; KC_MUTE on encoder press.
  *   _LOWER  : only the symbols unreachable elsewhere ([ ] { } | \ ` ~ - _); shifted-number symbols stay on _BASE.
- *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn).
+ *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn) + Del + Snip (Win+Shift+S).
  *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
  *
  * This program is free software under the GNU GPL v2 or later.
@@ -77,20 +77,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
-  /* _RAISE — F-keys on the number row + inverted-T arrows (I/J/K/L) + nav
+  /* _RAISE — F-keys on the number row + inverted-T arrows (I/J/K/L) + nav + edit
    * Arrows:  I = ^ (up, top row),  J = < ,  K = v ,  L = >  (home row)
+   * Edit:    Del on the Backspace key (forward delete), Snip on S (Win+Shift+S,
+   *          opens the Windows Snipping Tool in selection mode).
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    | F1 | F2 | F3 | F4 | F5 |            | F6 | F7 | F8 | F9 |F10 |F11 |
-   * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Bspc|
-   * |Shft|Caps|    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
+   * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Del |
+   * |Shft|Caps|Snip|    |    |    |            |PgDn|Left|Down|Rght|    |    |
    * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|     | Ctl | Alt | GUI |---'
    * (RGB/light controls moved to the 4th layer _NUMPAD, left hand)
    */
   [_RAISE] = LAYOUT(
     XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_BSPC,
-    KC_LSFT, KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_DEL,
+    KC_LSFT, KC_CAPS, LGUI(LSFT(KC_S)), XXXXXXX, XXXXXXX, XXXXXXX,             KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
     KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT,
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
   ),
