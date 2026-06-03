@@ -12,6 +12,10 @@
 #define SPLIT_USB_DETECT
 // The USB-connected half becomes master; the other one, slave.
 
+/* ---- Debounce ---- */
+#define DEBOUNCE 10
+// Higher than the default (5ms) to kill switch chatter / double key registration.
+
 /* ---- Tap dance ---- */
 #define TAPPING_TERM 200
 // Window for the tap-dance double tap (shift/caps).

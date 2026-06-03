@@ -1,132 +1,63 @@
-# Layout documentation — keymap `valian` (Sofle RGB)
+# Layout reference — keymap `valian` (Sofle RGB)
 
-Detailed reference for the 4 layers, encoders, RGB and OLED. The full visual diagram is in [`keymap.svg`](keymap.svg) (regenerated from `keymap.c` with keymap-drawer).
+The authoritative, always-up-to-date visual is [`keymap.svg`](keymap.svg) (regenerated from `keymap.c` with keymap-drawer). This page describes the intent of each layer.
 
 ![Keymap](keymap.svg)
 
-## Layer model
+## Layers
 
 | # | Layer | Access | Purpose |
 |---|-------|--------|---------|
-| 0 | `_BASE` | default | QWERTY + number row + mods |
+| 0 | `_BASE` | default | QWERTY + dedicated number row |
 | 1 | `_LOWER` | hold left thumb (`LOWER`) | standard symbols |
 | 2 | `_RAISE` | hold right thumb (`RAISE`) | F-keys + arrows + navigation |
-| 3 | `_NUMPAD` | **tri-layer**: `LOWER` + `RAISE` together | lights/config (left) + numpad (right) |
+| 3 | `_NUMPAD` | **tri-layer** (`LOWER`+`RAISE`) | lights/config (left) + numpad (right) |
 
-The tri-layer is implemented with `update_tri_layer(_LOWER, _RAISE, _NUMPAD)` in `process_record_user`: when layers 1 and 2 are active at the same time, layer 3 turns on.
+`_NUMPAD` is enabled via `update_tri_layer(_LOWER, _RAISE, _NUMPAD)` — hold both layer keys.
 
-Table conventions: `▽` = transparent (falls through to the layer below), `·` = unassigned (`XXXXXXX`).
+## Modifiers (identical on every layer)
 
----
+- **Shift** → home-row left pinky · **Ctrl** → bottom-row left pinky · **right Shift** → bottom-row right pinky.
+- Thumbs: **GUI / Alt / Ctrl** (inherited from base on every layer).
+- Right thumb is **AltGr** (Right Alt) for US-International: `AltGr + n = ñ`. Left thumb is normal Alt (e.g. paste images in Claude Code).
+- **Caps Lock** = `RAISE + A` (the key next to the left Shift). There is no tap-dance, so Caps never triggers by accident.
 
-## Layer 0 — `_BASE`
+## `_BASE`
 
-Standard QWERTY with the Sofle's dedicated number row on top (comfortable for games — no need to go to a layer for numbers).
+QWERTY with `Esc` top-left and numbers `1-0` on the dedicated top row (handy for games). Backtick `` ` `` lives on `_LOWER`.
 
-| Zone | Keys |
-|------|------|
-| Number row | `` ` `` 1 2 3 4 5 — 6 7 8 9 0 = |
-| Top row | Tab Q W E R T — Y U I O P Bksp |
-| Home row | Ctrl A S D F G — H J K L `;` `'` |
-| Bottom row | **TDsf** Z X C V B — N M `,` `.` `/` Shift |
-| Left thumbs | GUI · Alt · Ctrl · **LOWER** · Enter |
-| Right thumbs | Space · **RAISE** · Ctrl · Alt · GUI |
+## `_LOWER` — symbols (same idea as the Corne)
 
-- **TDsf** (`TD(TD_CAPLOCK)`): tap-dance — 1 tap = `Left Shift`, 2 taps = `Caps Lock`.
-- **Encoder:** rotate = volume ↑/↓ · press (both) = `Mute`.
+The top row is the **number row with Shift, in order** (`! @ # $ %  ^ & * ( )`) — nothing new to learn. The "awkward" symbols move to the home row: `[ ] { } |` and `_ - + = \` plus backtick; `~` on the bottom row. The number row stays transparent (you keep `1-0`).
 
----
+## `_RAISE` — F-keys + navigation
 
-## Layer 1 — `_LOWER` (symbols)
+F1-F12 on the number row; **inverted-T arrows** on the right hand (`I`=↑, `J`=←, `K`=↓, `L`=→) with `Home/End/PgUp/PgDn` around them. `Caps Lock` sits next to the left Shift.
 
-Same symbol layout as the Corne, designed so there is **nothing new to learn**: the top row is exactly the number row with Shift, in order.
+## `_NUMPAD` — lights/config + numpad
 
-| Zone | Keys |
-|------|------|
-| Number row | ▽ ▽ ▽ ▽ ▽ ▽ — ▽ ▽ ▽ ▽ ▽ ▽ |
-| Top row | Tab `!` `@` `#` `$` `%` — `^` `&` `*` `(` `)` Bksp |
-| Home row | Ctrl `[` `]` `{` `}` `\|` — `_` `-` `+` `=` `\` `` ` `` |
-| Bottom row | Shift · · · · · — · · · · `~` · |
-| Thumbs | ▽ (except `RAISE` on the right, to reach the tri-layer) |
+- **Right hand:** 10-key numpad (`7-8-9 / 4-5-6 / 1-2-3`, `0` next to `3`).
+- **Left hand:** RGB/keyboard controls — toggle, hue/sat/val, effect mode/speed, `Boot` (jump to bootloader), `EEclr` (clear EEPROM).
 
-**Design:**
-- Left = `! @ # $ %` (Shift+1..5) · Right = `^ & * ( )` (Shift+6..0). It's the full number row with Shift.
-- Only the "awkward" symbols are relocated to the home row: brackets (`[ ] { }`), pipe (`|`), and operators (`_ - + = \` and backtick).
-- The number row stays transparent: you still get `1..0` from base without leaving the layer.
-- **Encoder:** rotate = `PgUp` / `PgDn`.
+## Encoders
 
----
-
-## Layer 2 — `_RAISE` (F-keys + navigation)
-
-| Zone | Keys |
-|------|------|
-| Number row | · F1 F2 F3 F4 F5 — F6 F7 F8 F9 F10 F11 |
-| Top row | · · · · · · — PgUp Home **↑** End F12 Bksp |
-| Home row | Ctrl · · · · · — PgDn **←** **↓** **→** · · |
-| Bottom row | Shift · · · · · — · · · · · · |
-| Thumbs | ▽ (except `LOWER` on the left, for the tri-layer) |
-
-**Design:**
-- **Inverted-T** arrows on the right hand: `I` = ↑, `J` = ←, `K` = ↓, `L` = →. Around them: `Home`/`End`/`PgUp`/`PgDn` for full one-handed navigation.
-- F1-F12 live on the number row, so they **don't collide** with the arrows (rows 1-2).
-- **Encoder:** rotate = `Ctrl+Tab` / `Ctrl+Shift+Tab` (next / previous tab or track).
-
----
-
-## Layer 3 — `_NUMPAD` (lights/config + numpad) · tri-layer
-
-Entered by holding `LOWER` + `RAISE` together.
-
-| Zone | Left (lights/config) | Right (numpad) |
-|------|----------------------|----------------|
-| Top row | `Tog` `Mode+` `Hue+` `Sat+` `Val+` | · `7` `8` `9` · |
-| Home row | `Boot` `Mode-` `Hue-` `Sat-` `Val-` | · `4` `5` `6` · |
-| Bottom row | `EEclr` · `Spd-` `Spd+` · | · `1` `2` `3` `0` |
-
-**Right hand — 10-key numpad:** `7-8-9` over U-I-O, `4-5-6` over J-K-L, `1-2-3` over M-,-. and `0` next to `3`. Fast one-handed number entry.
-
-**Left hand — keyboard controls:**
-
-| Key | Keycode | Function |
-|-----|---------|----------|
-| Tog | `UG_TOGG` | toggle RGB underglow on/off |
-| Hue+ / Hue- | `HUI` / `HUD` | raise/lower hue (feeds the `_BASE` dynamic hue) |
-| Sat+ / Sat- | `UG_SATU` / `UG_SATD` | saturation |
-| Val+ / Val- | `UG_VALU` / `UG_VALD` | brightness |
-| Mode+ / Mode- | `UG_NEXT` / `UG_PREV` | RGB animation effect |
-| Spd+ / Spd- | `UG_SPDU` / `UG_SPDD` | effect speed |
-| Boot | `QK_BOOT` | jump to bootloader (flash without touching the physical RESET) |
-| EEclr | `EE_CLR` | clear EEPROM (reset stored settings) |
-
-> `HUI`/`HUD` are custom keycodes (not the standard `UG_HUE*`) because they feed the dynamic hue that `_BASE` remembers across layers.
-
----
+| Layer | Rotate | Press |
+|-------|--------|-------|
+| `_BASE` | volume ↑/↓ | Mute |
+| `_LOWER` | PgUp / PgDn | Mute |
+| `_RAISE` | Ctrl+Tab / Ctrl+Shift+Tab | Mute |
 
 ## Per-layer RGB
 
-The underglow color changes with the highest active layer (`layer_state_set_user` → `rgblight_sethsv_noeeprom`):
-
-| Layer | Color |
-|-------|-------|
-| `_BASE` | dynamic hue (adjustable with Hue+/Hue-) |
-| `_LOWER` | red |
-| `_RAISE` | green |
-| `_NUMPAD` | blue |
-| Caps Lock on | gold — takes priority over the layer |
+`_BASE` dynamic hue (Hue+/Hue- on `_NUMPAD`) · `_LOWER` red · `_RAISE` green · `_NUMPAD` blue · Caps Lock on → gold (priority).
 
 ## OLED
 
-| Half | Content |
-|------|---------|
-| Master | **dog** animation (96px) + active layer (`BASE`/`LOWER`/`RAISE`/`NUMPD`) + HSV values |
-| Slave | **cat** animation (320px, idle vs. tap based on WPM) + WPM counter |
+- **Master:** dog animation (reacts to mods/caps) + active layer + HSV values.
+- **Slave:** cat animation (continuous).
+- Each half turns its OLED off after 60s without local key activity, back on with any keypress.
 
-The dog reacts to modifiers: `Caps`→barks, `Ctrl`→sneaks, `GUI`→walks, `RAlt`→runs, `Space`→jumps. Both screens rotate 270° and turn off after 60s of inactivity.
-
----
-
-## Regenerating the diagram
+## Regenerate the diagram
 
 ```bash
 export PYTHONUTF8=1

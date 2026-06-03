@@ -31,16 +31,18 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 
 ```
 ,-----------------------------------------.                ,-----------------------------------------.
-|  `  |  1  |  2  |  3  |  4  |  5  |                      |  6  |  7  |  8  |  9  |  0  |  =  |
+| Esc |  1  |  2  |  3  |  4  |  5  |                      |  6  |  7  |  8  |  9  |  0  |  =  |
 | Tab |  Q  |  W  |  E  |  R  |  T  |                      |  Y  |  U  |  I  |  O  |  P  | Bsp |
-| Ctrl|  A  |  S  |  D  |  F  |  G  |                      |  H  |  J  |  K  |  L  |  ;  |  '  |
-| TDsf|  Z  |  X  |  C  |  V  |  B  |Mute |          |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
-            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|RAISE| Ctrl| Alt | GUI |
+|Shift|  A  |  S  |  D  |  F  |  G  |                      |  H  |  J  |  K  |  L  |  ;  |  '  |
+| Ctrl|  Z  |  X  |  C  |  V  |  B  |Mute |          |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
+            | GUI | Alt | Ctrl|LOWER|Space|          |Enter|RAISE| Ctrl|AltGr| GUI |
             `-----------------------------'          `-----------------------------'
 ```
 
-- **TDsf** = tap-dance: 1 tap = `Shift`, 2 taps = `Caps Lock`.
-- Numbers 1-0 live on the top row (handy for games).
+- **Shift** on the home-row pinky, **Ctrl** on the bottom-row pinky — identical on every layer. `Caps Lock` = `RAISE + A`.
+- `Esc` is top-left. Numbers 1-0 live on the top row (handy for games).
+- Left thumb = normal **Alt**; right thumb = **AltGr** (Right Alt) for US-International (`AltGr + n = ñ`).
+- Modifiers (`Ctrl`, both `Shift`, `GUI`, `Alt`/`AltGr`) stay available on **every layer**.
 - **Encoder:** rotate = volume ↑/↓ · press = `Mute`.
 
 ### `_LOWER` — standard symbols (same as the Corne)
@@ -49,8 +51,8 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 ,-----------------------------------------.                ,-----------------------------------------.
 |     |     |     |     |     |     |                      |     |     |     |     |     |     |
 | Tab |  !  |  @  |  #  |  $  |  %  |                      |  ^  |  &  |  *  |  (  |  )  | Bsp |
-| Ctrl|  [  |  ]  |  {  |  }  |  |  |                      |  _  |  -  |  +  |  =  |  \  |  `  |
-|Shift|     |     |     |     |     |Mute |          |Mute |     |     |     |     |  ~  |     |
+|Shift|  [  |  ]  |  {  |  }  |  |  |                      |  _  |  -  |  +  |  =  |  \  |  `  |
+| Ctrl|     |     |     |     |     |Mute |          |Mute |     |     |     |     |  ~  |Shift|
             | GUI | Alt | Ctrl|     |Enter|          |Space|RAISE| Ctrl| Alt | GUI |
             `-----------------------------'          `-----------------------------'
 ```
@@ -66,13 +68,14 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 ,-----------------------------------------.                ,-----------------------------------------.
 |     | F1  | F2  | F3  | F4  | F5  |                      | F6  | F7  | F8  | F9  | F10 | F11 |
 |     |     |     |     |     |     |                      |PgUp |Home |  ↑  | End | F12 | Bsp |
-| Ctrl|     |     |     |     |     |                      |PgDn |  ←  |  ↓  |  →  |     |     |
-|Shift|     |     |     |     |     |Mute |          |Mute |     |     |     |     |     |     |
-            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|     | Ctrl| Alt | GUI |
+|Shift| Caps|     |     |     |     |                      |PgDn |  ←  |  ↓  |  →  |     |     |
+| Ctrl|     |     |     |     |     |Mute |          |Mute |     |     |     |     |     |Shift|
+            | GUI | Alt | Ctrl|LOWER|Space|          |Enter|     | Ctrl|AltGr| GUI |
             `-----------------------------'          `-----------------------------'
 ```
 
 - **Inverted-T** arrows on the right hand: `I` = ↑, `J` = ←, `K` = ↓, `L` = →.
+- `Caps Lock` = `RAISE + A` (key next to the left Shift).
 - F-keys sit on the number row, so they don't collide with `I/J/K/L`.
 - RGB / light controls were moved to the 4th layer (`_NUMPAD`, left hand).
 - **Encoder:** rotate = `Ctrl+Tab` / `Ctrl+Shift+Tab` (switch tab/track).
@@ -83,9 +86,9 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 ,-----------------------------------------.                ,-----------------------------------------.
 |     |     |     |     |     |     |                      |     |     |     |     |     |     |
 |     |Tog  |Mode+|Hue+ |Sat+ |Val+ |                      |     |  7  |  8  |  9  |     |     |
-|     |Boot |Mode-|Hue- |Sat- |Val- |                      |     |  4  |  5  |  6  |     |     |
-|     |EEclr|     |Spd- |Spd+ |     |Mute |          |Mute |     |  1  |  2  |  3  |  0  |     |
-            | GUI | Alt | Ctrl|LOWER|Enter|          |Space|RAISE| Ctrl| Alt | GUI |
+|Shift|Boot |Mode-|Hue- |Sat- |Val- |                      |     |  4  |  5  |  6  |     |     |
+| Ctrl|EEclr|     |Spd- |Spd+ |     |Mute |          |Mute |     |  1  |  2  |  3  |  0  |Shift|
+            | GUI | Alt | Ctrl|LOWER|Space|          |Enter|RAISE| Ctrl|AltGr| GUI |
             `-----------------------------'          `-----------------------------'
 ```
 
@@ -111,8 +114,8 @@ The underglow color changes with the active layer (`rgblight`):
 ## 🖥️ OLED
 
 - **Master:** **dog** animation (96px — Caps→barks, Ctrl→sneaks, GUI→walks, RAlt→runs, Space→jumps) + active layer + HSV values.
-- **Slave:** **cat** animation (320px — idle vs. tap based on WPM) + WPM counter.
-- Turns itself off after 60s of inactivity.
+- **Slave:** **cat** animation (320px, continuous).
+- Turns itself off after 60s of inactivity (per half), back on with any keypress.
 
 ---
 

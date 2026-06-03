@@ -4,7 +4,7 @@
  * Pure-code keymap, no VIA. Ported from valianx/corne-config.
  *
  * Layers:
- *   _BASE   : QWERTY + number row + thumbs; tap-dance shift/caps; KC_MUTE on encoder press.
+ *   _BASE   : QWERTY + number row + thumbs; KC_MUTE on encoder press.
  *   _LOWER  : standard symbols (same layout as the Corne: ! @ # $ % ^ & * ( ), brackets and operators).
  *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn).
  *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
@@ -28,15 +28,6 @@ enum custom_keycodes {
     HUD,   // hue down (rgblight)
 };
 
-enum td_keycodes {
-    TD_CAPLOCK
-};
-
-// Tap dance: single tap = Left Shift, double tap = Caps Lock.
-tap_dance_action_t tap_dance_actions[] = {
-    [TD_CAPLOCK] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
-};
-
 /* ====================================================================
  * KEYMAPS
  *
@@ -51,18 +42,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* _BASE — QWERTY + numbers on the top row (gaming-friendly)
    * ,-----------------------------------------.                    ,-----------------------------------------.
-   * | `  |  1 |  2 |  3 |  4 |  5 |            |  6 |  7 |  8 |  9 |  0 |  =  |
+   * |Esc |  1 |  2 |  3 |  4 |  5 |            |  6 |  7 |  8 |  9 |  0 |  =  |
    * |Tab | Q  | W  | E  | R  | T  |            | Y  | U  | I  | O  | P  |Bspc|
-   * |Ctrl| A  | S  | D  | F  | G  |            | H  | J  | K  | L  | ;  | '  |
-   * |TDsf| Z  | X  | C  | V  | B  |Mute| |Mute| N  | M  | ,  | .  | /  |Shft|
-   * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|RAISE| Ctl | Alt | GUI |---'
+   * |Shft| A  | S  | D  | F  | G  |            | H  | J  | K  | L  | ;  | '  |
+   * |Ctrl| Z  | X  | C  | V  | B  |Mute| |Mute| N  | M  | ,  | .  | /  |Shft|
+   * `----------| GUI | Alt | Ctl |LOWER|Space| |Enter|RAISE| Ctl | Alt | GUI |---'
    */
   [_BASE] = LAYOUT(
-    KC_GRV,        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
+    KC_ESC,        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
     KC_TAB,        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    KC_LCTL,       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-    TD(TD_CAPLOCK),KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,     KC_MUTE,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-                       KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_ENT,        KC_SPC,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
+    KC_LSFT,       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+    KC_LCTL,       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,     KC_MUTE,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+                       KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,        KC_ENT,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
   /* _LOWER — standard symbols (same layout as the Corne, matches the US keyboard)
@@ -72,15 +63,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
    * |Tab | !  | @  | #  | $  | %  |            | ^  | &  | *  | (  | )  |Bspc|
-   * |Ctrl| [  | ]  | {  | }  | |  |            | _  | -  | +  | =  | \  | `  |
-   * |Shft|    |    |    |    |    |Mute| |Mute|    |    |    |    |    | ~  |
+   * |Shft| [  | ]  | {  | }  | |  |            | _  | -  | +  | =  | \  | `  |
+   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    | ~  |Shft|
    * `----------| GUI | Alt | Ctl |     |Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_LOWER] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
     KC_TAB,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
-    KC_LCTL, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_UNDS, KC_MINS, KC_PLUS, KC_EQL,  KC_BSLS, KC_GRV,
-    KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD,
+    KC_LSFT, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_UNDS, KC_MINS, KC_PLUS, KC_EQL,  KC_BSLS, KC_GRV,
+    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD, KC_RSFT,
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
@@ -89,16 +80,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    | F1 | F2 | F3 | F4 | F5 |            | F6 | F7 | F8 | F9 |F10 |F11 |
    * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Bspc|
-   * |Ctrl|    |    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
-   * |Shft|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |    |
+   * |Shft|Caps|    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
+   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|     | Ctl | Alt | GUI |---'
    * (RGB/light controls moved to the 4th layer _NUMPAD, left hand)
    */
   [_RAISE] = LAYOUT(
     XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_BSPC,
-    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
-    KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    KC_LSFT, KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
+    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT,
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
   ),
 
@@ -111,15 +102,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
    * |    |Tog |Nxt |Hue+|Sat+|Val+|            |    | 7  | 8  | 9  |    |    |
-   * |    |Boot|Prv |Hue-|Sat-|Val-|            |    | 4  | 5  | 6  |    |    |
-   * |    |EEcl|    |Spd-|Spd+|    |Mute| |Mute|    | 1  | 2  | 3  | 0  |    |
+   * |Shft|Boot|Prv |Hue-|Sat-|Val-|            |    | 4  | 5  | 6  |    |    |
+   * |Ctrl|EEcl|    |Spd-|Spd+|    |Mute| |Mute|    | 1  | 2  | 3  | 0  |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_NUMPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
     _______, UG_TOGG, UG_NEXT, HUI,     UG_SATU, UG_VALU,                       XXXXXXX, KC_7,    KC_8,    KC_9,    XXXXXXX, _______,
-    _______, QK_BOOT, UG_PREV, HUD,     UG_SATD, UG_VALD,                       XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX, _______,
-    _______, EE_CLR,  XXXXXXX, UG_SPDD, UG_SPDU, XXXXXXX, _______,    _______,  XXXXXXX, KC_1,    KC_2,    KC_3,    KC_0,    _______,
+    KC_LSFT, QK_BOOT, UG_PREV, HUD,     UG_SATD, UG_VALD,                       XXXXXXX, KC_4,    KC_5,    KC_6,    XXXXXXX, _______,
+    KC_LCTL, EE_CLR,  XXXXXXX, UG_SPDD, UG_SPDU, XXXXXXX, _______,    _______,  XXXXXXX, KC_1,    KC_2,    KC_3,    KC_0,    KC_RSFT,
                        _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______
   )
 };
@@ -193,8 +184,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 /* ====================================================================
  * OLED — reactive animations ported from the Corne
- *   Master : dog (96px, reacts to mods/caps/WPM) + layer + HSV.
- *   Slave  : cat (320px, idle vs tap based on WPM) + WPM.
+ *   Master : dog (96px, reacts to mods/caps) + layer + HSV.
+ *   Slave  : cat (320px, continuous animation).
  *   Both rotated 270.
  *
  *   Flash trade-off: the cat (320px x 3 frames) is the biggest PROGMEM
@@ -204,7 +195,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
  * ==================================================================== */
 #ifdef OLED_ENABLE
 
-#define WPM_TAP 15              // WPM threshold for the cat to start typing
 #define ANIM_FRAME_DURATION 200
 #define ANIM_SIZE_DOG 96
 #define ANIM_SIZE_CAT 320
@@ -212,11 +202,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 static led_t led_usb_state;
 static uint32_t anim_dog_timer;
 static uint32_t anim_cat_timer;
-static uint32_t anim_dog_sleep;
-static uint32_t anim_cat_sleep;
 static uint8_t  current_dog_frame = 0;
 static uint8_t  current_cat_frame = 0;
-static uint8_t  current_wpm = 0;
 
 static bool showedJump = true;
 static bool isJumping  = false;
@@ -227,7 +214,6 @@ static bool isRunning  = false;
 static char hue_str[4];
 static char sat_str[4];
 static char val_str[4];
-static char wpm_str[4];
 
 static void render_dog(int DOG_X, int DOG_Y) {
     static const char PROGMEM sit[2][ANIM_SIZE_DOG] = {
@@ -429,22 +415,14 @@ static void render_cat(void) {
          0x01,0x01,0x01,0x01,0x01,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x04,0x02,0x01}
     };
 
-    if (current_wpm < WPM_TAP) {
+    // Animate continuously (independent of cross-split WPM sync) so the cat
+    // always moves while the OLED is on: idle -> tap0 -> tap1 -> idle ...
+    current_cat_frame = (current_cat_frame + 1) % 3;
+    if (current_cat_frame == 0) {
         oled_write_raw_P(idle[0], ANIM_SIZE_CAT);
     } else {
-        current_cat_frame = (current_cat_frame + 1) % 2;
-        oled_write_raw_P(tap[abs((2 - 1) - current_cat_frame)], ANIM_SIZE_CAT);
+        oled_write_raw_P(tap[current_cat_frame - 1], ANIM_SIZE_CAT);
     }
-}
-
-static void render_wpm(void) {
-    uint8_t wpm = current_wpm;  // local copy: don't mutate the global with /= 10
-    oled_write("WPM\n", false);
-    wpm_str[3] = '\0';
-    wpm_str[2] = '0' + wpm % 10;
-    wpm_str[1] = '0' + (wpm /= 10) % 10;
-    wpm_str[0] = '0' + wpm / 10;
-    oled_write(wpm_str, false);
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -452,19 +430,17 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 }
 
 bool oled_task_user(void) {
-    current_wpm   = get_current_wpm();
     led_usb_state = host_keyboard_led_state();
 
-    if ((timer_elapsed32(anim_dog_sleep) > 60000)
-        && (timer_elapsed32(anim_cat_sleep) > 60000)
-        && (current_wpm == 0)) {
+    // Turn the OLED off after 60s without local key activity (works per-half,
+    // no WPM sync needed), and back on as soon as there's activity.
+    if (last_input_activity_elapsed() > 60000) {
         if (is_oled_on()) {
             oled_off();
         }
         return false;
     }
-
-    if (current_wpm != 0 && !is_oled_on()) {
+    if (!is_oled_on()) {
         oled_on();
     }
 
@@ -474,20 +450,16 @@ bool oled_task_user(void) {
             anim_dog_timer = timer_read32();
             render_dog(0, 1);
         }
-        if (current_wpm != 0) { anim_dog_sleep = timer_read32(); }
         oled_set_cursor(0, 5);
         render_layer();
         oled_set_cursor(0, 10);
         render_hsv();
     } else {
-        // Cat + WPM
+        // Cat
         if (timer_elapsed32(anim_cat_timer) > ANIM_FRAME_DURATION) {
             anim_cat_timer = timer_read32();
             render_cat();
         }
-        if (current_wpm != 0) { anim_cat_sleep = timer_read32(); }
-        oled_set_cursor(0, 11);
-        render_wpm();
     }
     return false;
 }
