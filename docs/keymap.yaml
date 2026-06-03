@@ -1,7 +1,7 @@
 layout: {qmk_keyboard: sofle/rev1, layout_name: LAYOUT}
 layers:
-  L0: ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '=', TAB, Q, W, E, R, T, Y, U, I, O, P, BSPC, LCTL, A, S, D, F, G, H, J, K, L, ;, '''', TD(TD CAPLOCK),
-    Z, X, C, V, B, MUTE, MUTE, N, M, ',', ., /, RSFT, LGUI, LALT, LCTL, LOWER, ENT, SPC, RAISE, RCTL, RALT, RGUI]
+  L0: [ESC, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '=', TAB, Q, W, E, R, T, Y, U, I, O, P, BSPC, LSFT, A, S, D, F, G, H, J, K, L, ;, '''', LCTL, Z, X,
+    C, V, B, MUTE, MUTE, N, M, ',', ., /, RSFT, LGUI, LALT, LCTL, LOWER, SPC, ENT, RAISE, RCTL, RALT, RGUI]
   L1:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -27,7 +27,7 @@ layers:
   - (
   - )
   - BSPC
-  - LCTL
+  - LSFT
   - '['
   - ']'
   - '{'
@@ -39,7 +39,7 @@ layers:
   - '='
   - \
   - '`'
-  - LSFT
+  - LCTL
   - ''
   - ''
   - ''
@@ -47,12 +47,12 @@ layers:
   - ''
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - ''
   - ''
   - ''
   - ''
   - ''
   - '~'
+  - RSFT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -88,8 +88,8 @@ layers:
   - END
   - F12
   - BSPC
-  - LCTL
-  - ''
+  - LSFT
+  - CAPS
   - ''
   - ''
   - ''
@@ -100,7 +100,7 @@ layers:
   - RGHT
   - ''
   - ''
-  - LSFT
+  - LCTL
   - ''
   - ''
   - ''
@@ -113,7 +113,7 @@ layers:
   - ''
   - ''
   - ''
-  - ''
+  - RSFT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -149,7 +149,7 @@ layers:
   - '9'
   - ''
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - LSFT
   - QK BOOT
   - UG PREV
   - HUD
@@ -161,7 +161,7 @@ layers:
   - '6'
   - ''
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - LCTL
   - EE CLR
   - ''
   - UG SPDD
@@ -174,7 +174,7 @@ layers:
   - '2'
   - '3'
   - '0'
-  - {t: ▽, type: trans}
+  - RSFT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

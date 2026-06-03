@@ -6,9 +6,9 @@ OLED_ENABLE     = yes
 OLED_DRIVER     = ssd1306    # 0.91" OLED on both halves
 RGBLIGHT_ENABLE = yes        # underglow via rgblight (NOT RGB Matrix)
 ENCODER_ENABLE  = yes        # EC11 rotary encoders
-TAP_DANCE_ENABLE = yes       # shift / caps (TD_CAPLOCK)
+TAP_DANCE_ENABLE = no        # Shift is plain KC_LSFT on every layer (no caps tap-dance)
 EXTRAKEY_ENABLE = yes        # KC_MUTE / KC_VOLU / KC_VOLD
-WPM_ENABLE      = yes        # get_current_wpm() for the OLED animations
+WPM_ENABLE      = no         # not used (cat animates continuously)
 
 # ---- VIA: explicitly disabled (pure-code keymap) ----
 VIA_ENABLE      = no
