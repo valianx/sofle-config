@@ -4,9 +4,9 @@
  * Pure-code keymap, no VIA. Ported from valianx/corne-config.
  *
  * Layers:
- *   _BASE   : QWERTY + number row + thumbs; KC_MUTE on encoder press.
- *   _LOWER  : standard symbols (same layout as the Corne: ! @ # $ % ^ & * ( ), brackets and operators).
- *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn).
+ *   _BASE   : QWERTY + number row + thumbs. Left encoder: scroll + click = Snip (Win+Shift+S); right encoder: volume + click = Mute.
+ *   _LOWER  : only the symbols unreachable elsewhere ([ ] { } | \ ` ~ - _); shifted-number symbols stay on _BASE.
+ *   _RAISE  : F1..F12 on the number row + inverted-T arrows (I/J/K/L) + nav (Home/End/PgUp/PgDn) + Del + Snip (Win+Shift+S).
  *   _NUMPAD : 10-key numpad (right hand) + RGB/light controls (left hand); tri-layer (LOWER+RAISE).
  *
  * This program is free software under the GNU GPL v2 or later.
@@ -45,50 +45,55 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |Esc |  1 |  2 |  3 |  4 |  5 |            |  6 |  7 |  8 |  9 |  0 |  =  |
    * |Tab | Q  | W  | E  | R  | T  |            | Y  | U  | I  | O  | P  |Bspc|
    * |Shft| A  | S  | D  | F  | G  |            | H  | J  | K  | L  | ;  | '  |
-   * |Ctrl| Z  | X  | C  | V  | B  |Mute| |Mute| N  | M  | ,  | .  | /  |Shft|
+   * |Ctrl| Z  | X  | C  | V  | B  |Snip| |Mute| N  | M  | ,  | .  | /  |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Space| |Enter|RAISE| Ctl | Alt | GUI |---'
+   * (encoders: left = scroll / click Snip,  right = volume / click Mute)
    */
   [_BASE] = LAYOUT(
     KC_ESC,        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
     KC_TAB,        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_LSFT,       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-    KC_LCTL,       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,     KC_MUTE,   KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+    KC_LCTL,       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, LGUI(LSFT(KC_S)), KC_MUTE, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
                        KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,        KC_ENT,  RAISE,   KC_RCTL, KC_RALT, KC_RGUI
   ),
 
-  /* _LOWER — standard symbols (same layout as the Corne, matches the US keyboard)
-   * Top row = the number row with Shift, in order:  ! @ # $ %  ^ & * ( )
-   * Home = only the "awkward" ones relocated:  [ ] { } |   _ - + = \ `
-   * (the number row stays transparent -> you still get 1..0 from base)
+  /* _LOWER — only the symbols NOT reachable elsewhere, all on the home row.
+   * The shifted-number symbols (! @ # $ % ^ & * ( )) are intentionally absent:
+   * you already get them with Shift + the number row on _BASE. Likewise = and +
+   * live on _BASE (KC_EQL / Shift+=). So this layer keeps only the "unique" ones:
+   *   Home left :  [ ] { } |        Home right:  \ ` ~ - _
+   * The number row stays transparent -> you still get 1..0 while holding LOWER.
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    |    |    |    |    |    |            |    |    |    |    |    |    |
-   * |Tab | !  | @  | #  | $  | %  |            | ^  | &  | *  | (  | )  |Bspc|
-   * |Shft| [  | ]  | {  | }  | |  |            | _  | -  | +  | =  | \  | `  |
-   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    | ~  |Shft|
+   * |    |    |    |    |    |    |            |    |    |    |    |    |    |
+   * |Shft| [  | ]  | {  | }  | |  |            | \  | `  | ~  | -  | _  |    |
+   * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |Shft|
    * `----------| GUI | Alt | Ctl |     |Enter| |Space|RAISE| Ctl | Alt | GUI |---'
    */
   [_LOWER] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
-    KC_TAB,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                       KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
-    KC_LSFT, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_UNDS, KC_MINS, KC_PLUS, KC_EQL,  KC_BSLS, KC_GRV,
-    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_TILD, KC_RSFT,
+    _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+    KC_LSFT, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,                       KC_BSLS, KC_GRV,  KC_TILD, KC_MINS, KC_UNDS, XXXXXXX,
+    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT,
                        _______, _______, _______, _______, _______,       _______, RAISE,   _______, _______, _______
   ),
 
-  /* _RAISE — F-keys on the number row + inverted-T arrows (I/J/K/L) + nav
+  /* _RAISE — F-keys on the number row + inverted-T arrows (I/J/K/L) + nav + edit
    * Arrows:  I = ^ (up, top row),  J = < ,  K = v ,  L = >  (home row)
+   * Edit:    Del on the Backspace key (forward delete), Snip on S (Win+Shift+S,
+   *          opens the Windows Snipping Tool in selection mode).
    * ,-----------------------------------------.                    ,-----------------------------------------.
    * |    | F1 | F2 | F3 | F4 | F5 |            | F6 | F7 | F8 | F9 |F10 |F11 |
-   * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Bspc|
-   * |Shft|Caps|    |    |    |    |            |PgDn|Left|Down|Rght|    |    |
+   * |    |    |    |    |    |    |            |PgUp|Home| Up |End |F12 |Del |
+   * |Shft|Caps|Snip|    |    |    |            |PgDn|Left|Down|Rght|    |    |
    * |Ctrl|    |    |    |    |    |Mute| |Mute|    |    |    |    |    |Shft|
    * `----------| GUI | Alt | Ctl |LOWER|Enter| |Space|     | Ctl | Alt | GUI |---'
    * (RGB/light controls moved to the 4th layer _NUMPAD, left hand)
    */
   [_RAISE] = LAYOUT(
     XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_BSPC,
-    KC_LSFT, KC_CAPS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_F12,  KC_DEL,
+    KC_LSFT, KC_CAPS, LGUI(LSFT(KC_S)), XXXXXXX, XXXXXXX, XXXXXXX,             KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX,
     KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,    _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT,
                        _______, _______, _______, LOWER,   _______,       _______, _______, _______, _______, _______
   ),
@@ -116,28 +121,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 /* ====================================================================
- * ENCODERS
- *   _BASE  : volume (both encoders).
- *   _LOWER : page scroll (PgUp/PgDn).
- *   _RAISE : switch tab/track (Ctrl+Tab / Ctrl+Shift+Tab).
+ * ENCODERS  (index 0 = LEFT half, index 1 = RIGHT half)
+ *   _BASE  : left = mouse scroll, right = volume.
+ *   _LOWER : page scroll (PgUp/PgDn), both encoders.
+ *   _RAISE : switch tab/track (Ctrl+Tab / Ctrl+Shift+Tab), both encoders.
+ *
+ *   Note: the Sofle's two halves declare mirrored encoder A/B pins, so the
+ *   `clockwise` flag means physically-opposite directions per half. The _BASE
+ *   branch below is tuned so a clockwise (rightward) turn raises volume / scrolls
+ *   down; flip the two tap_code lines for an encoder if its direction feels off.
  * ==================================================================== */
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    switch (get_highest_layer(layer_state)) {
-        case _LOWER:
-            if (clockwise) { tap_code(KC_PGDN); } else { tap_code(KC_PGUP); }
-            break;
-        case _RAISE:
-            if (clockwise) {
-                tap_code16(C(KC_TAB));         // next tab/track
-            } else {
-                tap_code16(C(S(KC_TAB)));      // previous tab/track
-            }
-            break;
-        case _BASE:
-        default:
-            if (clockwise) { tap_code(KC_VOLU); } else { tap_code(KC_VOLD); }
-            break;
+    uint8_t layer = get_highest_layer(layer_state);
+
+    // Layer overrides apply to both encoders.
+    if (layer == _LOWER) {
+        if (clockwise) { tap_code(KC_PGDN); } else { tap_code(KC_PGUP); }
+        return false;
+    }
+    if (layer == _RAISE) {
+        if (clockwise) {
+            tap_code16(C(KC_TAB));             // next tab/track
+        } else {
+            tap_code16(C(S(KC_TAB)));          // previous tab/track
+        }
+        return false;
+    }
+
+    // _BASE: left encoder scrolls, right encoder controls volume.
+    if (index == 0) {                          // left half -> scroll
+        if (clockwise) { tap_code(MS_WHLD); } else { tap_code(MS_WHLU); }
+    } else {                                   // right half -> volume
+        if (clockwise) { tap_code(KC_VOLD); } else { tap_code(KC_VOLU); }
     }
     return false;
 }

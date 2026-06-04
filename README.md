@@ -1,4 +1,4 @@
-# ⌨️ sofle-config
+# ⌨️ Sofle Keyboard Config
 
 **QMK** configuration for the **Sofle RGB** keyboard (keymap `valian`) — pure code, no VIA.
 Ported from my [Corne config](https://github.com/valianx/corne-config) to the Sofle, which adds a dedicated number row, 5 thumb keys per hand and rotary encoders.
@@ -34,7 +34,7 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 | Esc |  1  |  2  |  3  |  4  |  5  |                      |  6  |  7  |  8  |  9  |  0  |  =  |
 | Tab |  Q  |  W  |  E  |  R  |  T  |                      |  Y  |  U  |  I  |  O  |  P  | Bsp |
 |Shift|  A  |  S  |  D  |  F  |  G  |                      |  H  |  J  |  K  |  L  |  ;  |  '  |
-| Ctrl|  Z  |  X  |  C  |  V  |  B  |Mute |          |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
+| Ctrl|  Z  |  X  |  C  |  V  |  B  |Snip |          |Mute |  N  |  M  |  ,  |  .  |  /  |Shift|
             | GUI | Alt | Ctrl|LOWER|Space|          |Enter|RAISE| Ctrl|AltGr| GUI |
             `-----------------------------'          `-----------------------------'
 ```
@@ -43,38 +43,39 @@ Four layers. `LOWER` and `RAISE` are momentary (active while held). **`NUMPAD` i
 - `Esc` is top-left. Numbers 1-0 live on the top row (handy for games).
 - Left thumb = normal **Alt**; right thumb = **AltGr** (Right Alt) for US-International (`AltGr + n = ñ`).
 - Modifiers (`Ctrl`, both `Shift`, `GUI`, `Alt`/`AltGr`) stay available on **every layer**.
-- **Encoder:** rotate = volume ↑/↓ · press = `Mute`.
+- **Encoders:** left = mouse scroll (rotate) + `Snip` on click (`Win+Shift+S`); right = volume ↑/↓ (rotate) + `Mute` on click.
 
-### `_LOWER` — standard symbols (same as the Corne)
+### `_LOWER` — symbols not reachable elsewhere
 
 ```
 ,-----------------------------------------.                ,-----------------------------------------.
 |     |     |     |     |     |     |                      |     |     |     |     |     |     |
-| Tab |  !  |  @  |  #  |  $  |  %  |                      |  ^  |  &  |  *  |  (  |  )  | Bsp |
-|Shift|  [  |  ]  |  {  |  }  |  |  |                      |  _  |  -  |  +  |  =  |  \  |  `  |
-| Ctrl|     |     |     |     |     |Mute |          |Mute |     |     |     |     |  ~  |Shift|
+|     |     |     |     |     |     |                      |     |     |     |     |     |     |
+|Shift|  [  |  ]  |  {  |  }  |  |  |                      |  \  |  `  |  ~  |  -  |  _  |     |
+| Ctrl|     |     |     |     |     |Snip |          |Mute |     |     |     |     |     |Shift|
             | GUI | Alt | Ctrl|     |Enter|          |Space|RAISE| Ctrl| Alt | GUI |
             `-----------------------------'          `-----------------------------'
 ```
 
-- The top row matches a US keyboard: it's **the number row with Shift, in order** (`! @ # $ %  ^ & * ( )`). Nothing new to learn.
-- Only the "awkward" symbols are relocated to the home row: `[ ] { } |` and `_ - + = \ \``.
-- The number row stays transparent → you still get 1-0 from the base.
+- Keeps **only the symbols you can't reach any other way**, all on the home row: `[ ] { } |` (left) and `` \ ` ~ - _ `` (right).
+- The shifted-number symbols (`! @ # $ %  ^ & * ( )`) are intentionally **not** here — you already get them with **Shift + the number row** on the base. Same for `=` (base) and `+` (`Shift + =`).
+- The number row stays transparent → you still get 1-0 while holding LOWER.
 - **Encoder:** rotate = `PgUp` / `PgDn`.
 
-### `_RAISE` — F1-F12 + inverted-T arrows (I/J/K/L)
+### `_RAISE` — F1-F12 + inverted-T arrows + edit keys
 
 ```
 ,-----------------------------------------.                ,-----------------------------------------.
 |     | F1  | F2  | F3  | F4  | F5  |                      | F6  | F7  | F8  | F9  | F10 | F11 |
-|     |     |     |     |     |     |                      |PgUp |Home |  ↑  | End | F12 | Bsp |
-|Shift| Caps|     |     |     |     |                      |PgDn |  ←  |  ↓  |  →  |     |     |
-| Ctrl|     |     |     |     |     |Mute |          |Mute |     |     |     |     |     |Shift|
+|     |     |     |     |     |     |                      |PgUp |Home |  ↑  | End | F12 | Del |
+|Shift| Caps|Snip |     |     |     |                      |PgDn |  ←  |  ↓  |  →  |     |     |
+| Ctrl|     |     |     |     |     |Snip |          |Mute |     |     |     |     |     |Shift|
             | GUI | Alt | Ctrl|LOWER|Space|          |Enter|     | Ctrl|AltGr| GUI |
             `-----------------------------'          `-----------------------------'
 ```
 
 - **Inverted-T** arrows on the right hand: `I` = ↑, `J` = ←, `K` = ↓, `L` = →.
+- **Edit keys:** `Del` (forward delete) on the Backspace key; `Snip` = `Win+Shift+S` (Windows Snipping Tool, selection mode) on `S`.
 - `Caps Lock` = `RAISE + A` (key next to the left Shift).
 - F-keys sit on the number row, so they don't collide with `I/J/K/L`.
 - RGB / light controls were moved to the 4th layer (`_NUMPAD`, left hand).
@@ -188,7 +189,7 @@ Flash each half (put it in bootloader first — see above). Keep this `.hex` in 
 
 ## ✅ Status
 
-Builds for `sofle/rev1` (Pro Micro): **25414 / 28672 bytes (88%, 3258 free)** — with animated OLED, per-layer RGB, encoders and tap-dance, no cuts.
+Builds for `sofle/rev1` (Pro Micro): **24848 / 28672 bytes (86%, 3824 free)** — with animated OLED, per-layer RGB, encoders (scroll + volume) and mouse keys, no cuts.
 
 ### VIA backup
 
